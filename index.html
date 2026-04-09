@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LeadFlow CRM</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-icon">⬡</div>
+        <h1>LeadFlow</h1>
+        <p>Client Lead Management System</p>
+      </div>
+      <form id="login-form" class="login-form">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="you@company.com" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn-primary btn-full" id="login-btn">
+          <span>Sign In</span>
+        </button>
+        <div id="login-error" class="alert alert-error hidden"></div>
+      </form>
+    </div>
+    <div class="login-bg">
+      <div class="bg-shape s1"></div>
+      <div class="bg-shape s2"></div>
+      <div class="bg-shape s3"></div>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">⬡</div>
+        <span>LeadFlow</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="leads">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span>Leads</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-logout" id="logout-btn">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="topbar">
+        <button class="sidebar-toggle" id="sidebar-toggle">
+          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-title" id="page-title">Dashboard</div>
+        <div class="topbar-actions">
+          <div id="toast-container"></div>
+        </div>
+      </header>
+
+      <!-- DASHBOARD PAGE -->
+      <section id="page-dashboard" class="page active">
+        <div class="page-header">
+          <h2>Overview</h2>
+          <p>Welcome back. Here's your lead pipeline at a glance.</p>
+        </div>
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card" data-status="all">
+            <div class="stat-label">Total Leads</div>
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:100%;background:var(--accent)"></div></div>
+          </div>
+          <div class="stat-card" data-status="new">
+            <div class="stat-label">New</div>
+            <div class="stat-value" id="stat-new">—</div>
+            <div class="stat-bar"><div class="stat-bar-fill fill-new" id="bar-new"></div></div>
+          </div>
+          <div class="stat-card" data-status="contacted">
+            <div class="stat-label">Contacted</div>
+            <div class="stat-value" id="stat-contacted">—</div>
+            <div class="stat-bar"><div class="stat-bar-fill fill-contacted" id="bar-contacted"></div></div>
+          </div>
+          <div class="stat-card" data-status="converted">
+            <div class="stat-label">Converted</div>
+            <div class="stat-value" id="stat-converted">—</div>
+            <div class="stat-bar"><div class="stat-bar-fill fill-converted" id="bar-converted"></div></div>
+          </div>
+        </div>
+
+        <div class="dashboard-bottom">
+          <div class="recent-leads-card">
+            <div class="card-header">
+              <h3>Recent Leads</h3>
+              <a href="#" class="link-sm" data-page-link="leads">View all →</a>
+            </div>
+            <div id="recent-leads-list" class="recent-leads-list">
+              <div class="skeleton-list">
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LEADS PAGE -->
+      <section id="page-leads" class="page hidden">
+        <div class="page-header">
+          <div>
+            <h2>Leads</h2>
+            <p>Manage and track all your client leads.</p>
+          </div>
+          <button class="btn-primary" id="open-add-lead">+ Add Lead</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="search-input" placeholder="Search by name, email, source…" />
+          </div>
+          <div class="filter-wrap">
+            <select id="status-filter">
+              <option value="">All Status</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="converted">Converted</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="leads-table" id="leads-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Source</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="leads-tbody">
+              <tr class="loading-row"><td colspan="5"><div class="loader"></div></td></tr>
+            </tbody>
+          </table>
+          <div id="empty-state" class="empty-state hidden">
+            <div class="empty-icon">◎</div>
+            <p>No leads found</p>
+            <span>Try adjusting your search or add a new lead.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ADD LEAD MODAL -->
+  <div id="modal-add-lead" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add New Lead</h3>
+        <button class="modal-close" data-close="modal-add-lead">✕</button>
+      </div>
+      <form id="add-lead-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="lead-name" placeholder="Jane Smith" required />
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="lead-email" placeholder="jane@company.com" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" id="lead-phone" placeholder="+1 555 000 0000" />
+          </div>
+          <div class="form-group">
+            <label>Source</label>
+            <select id="lead-source">
+              <option value="website">Website</option>
+              <option value="referral">Referral</option>
+              <option value="social">Social Media</option>
+              <option value="email">Email Campaign</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Initial Note</label>
+          <textarea id="lead-note" rows="3" placeholder="Any context about this lead…"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" data-close="modal-add-lead">Cancel</button>
+          <button type="submit" class="btn-primary" id="add-lead-btn">Add Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- NOTES MODAL -->
+  <div id="modal-notes" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3>Lead Notes</h3>
+          <span class="modal-subtitle" id="notes-lead-name"></span>
+        </div>
+        <button class="modal-close" data-close="modal-notes">✕</button>
+      </div>
+      <div id="notes-list" class="notes-list">
+        <div class="loader"></div>
+      </div>
+      <form id="add-note-form" class="note-form">
+        <textarea id="note-input" rows="3" placeholder="Write a note…" required></textarea>
+        <button type="submit" class="btn-primary" id="post-note-btn">Post Note</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
